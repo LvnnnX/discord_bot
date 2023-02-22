@@ -66,6 +66,7 @@ class kalender(commands.Cog):
         )
         for a, x in enumerate(daftarjudul):
             embed.add_field(name=x, value=listraya[a], inline=False)
+        embed.set_footer(text='powered by enkosa.com')
         await ctx.send(embed=embed)
 
 
