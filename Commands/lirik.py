@@ -1,28 +1,32 @@
 import discord
 from discord.ext import commands
-import re,requests
+import re, requests
 from bs4 import BeautifulSoup
+import numpy as np
+
 
 class lirik(commands.Cog):
-    def __init__(self,client):
-        self.client=client
+    def __init__(self, client):
+        self.client = client
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print('Lirik loaded!')
+        print("Lirik loaded!")
 
-    @commands.command(help='n.lirik (pencarian lirik lagu)')
-    async def lirik(self, ctx):
-        await ctx.send("Masukkan nama lagu")
-        lagu = await self.client.wait_for(
-            "message", timeout=60, check=lambda message: message.author == ctx.author
-        )
-        await ctx.send("Masukkan nama band")
-        band = await self.client.wait_for(
-            "message", timeout=60, check=lambda message: message.author == ctx.author
-        )
-        findlirik = lagu.content
-        findband = band.content
+    @commands.command(help="n.lirik <nama lagu> & <nama band> (cari lirik lagu)")
+    async def lirik(self, ctx, *args1):
+        # await ctx.send("Masukkan nama lagu")
+        # lagu = await self.client.wait_for(
+        #     "message", timeout=60, check=lambda message: message.author == ctx.author
+        # )
+        # await ctx.send("Masukkan nama band")
+        # band = await self.client.wait_for(
+        #     "message", timeout=60, check=lambda message: message.author == ctx.author
+        # )
+        argument = " ".join(args1).split("&")
+        findlirik = argument[0].strip()
+        findband = argument[1].strip()
+        print(findlirik, "dan", findband)
         url = (
             "https://lirik.web.id/"
             + findband[0]
@@ -36,18 +40,21 @@ class lirik(commands.Cog):
         )
         alamat = requests.get(url).text
         soup = BeautifulSoup(alamat, "html.parser")
-        lirik = []
+        lirik = np.array([], dtype="S")
         final = ""
         for t in soup.findAll("p"):
-            lirik.append(t)
+            lirik = np.append(lirik, t)
         TAG_RE = re.compile(r"<[^>]+>")
-        for t in lirik[:-1]:
+        for a, t in np.ndenumerate(lirik[:-1]):
             clean = TAG_RE.sub("", str(t))
-            final = final + (clean + "\n")
+            clean = re.sub("\n", "", str(clean))
+            if clean != "":
+                final = final + (clean + "\n")
         if final != "":
             await ctx.send(final)
         if len(lirik) == 0:
             await ctx.send(f'{findband}\'s song "{findlirik}" lyrics not found!')
+
 
 async def setup(client):
     await client.add_cog(lirik(client))

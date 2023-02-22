@@ -1,15 +1,17 @@
-import discord
+import discord, re, requests
 from discord.ext import commands
+from bs4 import BeautifulSoup
+
 
 class jodoh(commands.Cog):
-    def __init__(self,client):
-        self.client=client
+    def __init__(self, client):
+        self.client = client
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print('jodoh loaded!')
+        print("jodoh loaded!")
 
-    @commands.command(help='n.jodoh <tanggal1> <tanggal2> (pencocokan tanggal lahir)')
+    @commands.command(help="n.jodoh <tanggal1> <tanggal2> (pencocokan tanggal lahir)")
     async def jodoh(self, ctx, args1, args2):
         sum_tanggal = int(args1) + int(args2)
         embed = discord.Embed(
@@ -31,6 +33,49 @@ class jodoh(commands.Cog):
         else:
             embed.add_field(name="\u200b", value=str(hasil_6), inline=False)
         await ctx.send(embed=embed)
-    
+
+    @commands.command(help="n.cocok_nama <nama1> & <nama2>")
+    async def cocok_nama(self, ctx, *args):
+        all_name = " ".join(args)
+        try:
+            get_nama = all_name.split("&")
+            nama_1 = re.sub(" ", "+", str(get_nama[0]))
+            nama_2 = re.sub(" ", "+", str(get_nama[1]))
+        except:
+            await ctx.send(f"Format nama tidak valid! coba lagi!")
+            return
+        url = (
+            f"https://www.primbon.com/kecocokan_nama_pasangan.php?nama1="
+            + nama_1
+            + "&nama2="
+            + nama_2
+            + "&proses=+Submit%21+"
+        )
+        alamat = requests.get(url).text
+        soup = BeautifulSoup(alamat, "html.parser")
+        container = soup.find("div", id="body")
+        container_clean = container.getText(separator="\n").split("\n")  # type:ignore
+        # get only [17:26]
+        embed = discord.Embed(
+            title=f"Kecocokan nama pasangan🤭", colour=discord.Colour.blue()
+        )
+        cek = 0
+        for key, value in enumerate(container_clean[17:25]):
+            if key % 2 == 1:
+                continue
+            if not cek:
+                embed.add_field(
+                    name=value, value=str(container_clean[key + 18]), inline=True
+                )
+                cek = 1
+            else:
+                embed.add_field(
+                    name=value, value=str(container_clean[key + 18]), inline=False
+                )
+                cek = 0
+        embed.add_field(name="Catatan", value=str(container_clean[25]), inline=False)
+        await ctx.send(embed=embed)
+
+
 async def setup(client):
     await client.add_cog(jodoh(client))
