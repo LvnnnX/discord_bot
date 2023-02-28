@@ -2,11 +2,8 @@
 __pycache__/
 *.py[cod]
 *$py.class
-token_openai.json
-token.json
-jadwal.ipynb
-kbbi.ipynb
-bot.py
+*.json
+*.ipynb
 # C extensions
 *.so
 
