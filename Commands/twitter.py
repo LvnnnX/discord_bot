@@ -4,7 +4,7 @@ from discord.ext import commands
 from requests_oauthlib import OAuth1
 
 BASE_DIR = pathlib.Path(__file__).parent  # base directory
-TOKEN_DIR = BASE_DIR.parent  # token directory a.k.a parent dir
+TOKEN_DIR = BASE_DIR.parent / "token" # token directory a.k.a parent dir
 
 # Getting keys for tweepy
 with open(f"{TOKEN_DIR}\\token.json") as f:
