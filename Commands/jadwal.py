@@ -79,9 +79,8 @@ class jadwal(commands.Cog):
             texter = ""
             date = ""
             for w, x, y, z in zip(kelas_df['Link Webex'], kelas_df["Mata Kuliah"], kelas_df[f"{kelas}"], kelas_df[f"Jadwal {kelas}"]):
-                texter = texter + x + "\n" + y.split(",")[0] + "\n" + "." * 50 + "\n"
-                date = date + z +  ('\n'+w if w != '' else '\n.')  + "\n.\n"
-                print(texter)
+                texter = texter + x + "\n" + y.split(",")[0] + ("\n"+"." * 10 if len(x)<=28 else '') + ('\n'+'.'*10+'\n' if len(w)>=53 else '\n')
+                date = date + z +  ('\n'+w+'\n' if w != '' else '\n.\n.\n')
             embed.add_field(name=f"KELAS {kelas}", value=texter, inline=True)
             # embed.add_field(name=f'KELAS {new}',value=df['MATA KULIAH'].to_string(index=False),inline=True)
             embed.add_field(name="JAM PELAJARAN", value=date, inline=True)
