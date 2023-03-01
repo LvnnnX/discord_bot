@@ -81,9 +81,9 @@ class jadwal(commands.Cog):
             for w, x, y, z in zip(kelas_df['Link Webex'], kelas_df["Mata Kuliah"], kelas_df[f"{kelas}"], kelas_df[f"Jadwal {kelas}"]):
                 texter = texter + x + "\n" + y.split(",")[0] + ("\n"+"." * 10 if len(x)<=28 else '') + ('\n'+'.'*10+'\n' if len(w)>=53 else '\n')
                 date = date + z +  ('\n'+w+'\n' if w != '' else '\n.\n.\n')
-            embed.add_field(name=f"KELAS {kelas}", value=texter, inline=True)
+            embed.add_field(name=f"『KELAS {kelas}』", value=texter, inline=True)
             # embed.add_field(name=f'KELAS {new}',value=df['MATA KULIAH'].to_string(index=False),inline=True)
-            embed.add_field(name="JAM PELAJARAN", value=date, inline=True)
+            embed.add_field(name="『JAM PELAJARAN』", value=date, inline=True)
             # embed.add_field(name='JAM PELAJARAN',value=df[f'JADWAL {new}'].to_string(index=False),inline=True)
             embed.add_field(name="\u200b", value="\u200b")
 
@@ -91,6 +91,7 @@ class jadwal(commands.Cog):
             name="by Agatha & Ngikngok",
             icon_url="https://cdn.discordapp.com/attachments/952898818767196202/1076789878404161556/320890519_721815005774688_2433660246175642108_n.jpg",
         )
+        embed.set_footer(text='source: Jadual Genap 2022-2023 eDIT 1')
         await ctx.send(embed=embed)
 
 async def setup(client):
