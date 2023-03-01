@@ -89,7 +89,7 @@ class jadwal(commands.Cog):
 
         embed.set_author(
             name="by Agatha & Ngikngok",
-            icon_url="https://cdn.discordapp.com/attachments/952898818767196202/1014169174320369704/Screenshot_2022-08-07_132626.png",
+            icon_url="https://cdn.discordapp.com/attachments/952898818767196202/1076789878404161556/320890519_721815005774688_2433660246175642108_n.jpg",
         )
         await ctx.send(embed=embed)
 
