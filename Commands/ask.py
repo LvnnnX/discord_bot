@@ -2,7 +2,7 @@ import discord, pathlib, openai, json
 from discord.ext import commands
 
 BASE_DIR = pathlib.Path(__file__).parent
-TOKEN_DIR = BASE_DIR.parent
+TOKEN_DIR = BASE_DIR.parent / "token"
 
 with open(f"{TOKEN_DIR}/token_openai.json") as f:
     tokens = json.load(f)
