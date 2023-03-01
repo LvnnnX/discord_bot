@@ -68,11 +68,19 @@ class jadwal(commands.Cog):
                         if(int(jam_now)>int(jam_next)):
                             b,a = kelas_df.iloc[key2].copy() ,kelas_df.iloc[key].copy()
                             kelas_df.iloc[key2],kelas_df.iloc[key] = a,b
+                linkweb = ['' for x in range(len(kelas_df))]
+                for x in range(len(kelas_df)):
+                    namadosen = kelas_df[f'{kelas}'].iloc[x]
+                    for y in range(len(webex)):
+                        namadosen2 = webex['Nama'].iloc[y]
+                        if(namadosen==namadosen2):
+                            linkweb[x] = (webex['Link'].iloc[y])
+                kelas_df['Link Webex'] = linkweb
             texter = ""
             date = ""
-            for x, y, z in zip(kelas_df["Mata Kuliah"], kelas_df[f"{kelas}"], kelas_df[f"Jadwal {kelas}"]):
+            for w, x, y, z in zip(kelas_df['Link Webex'], kelas_df["Mata Kuliah"], kelas_df[f"{kelas}"], kelas_df[f"Jadwal {kelas}"]):
                 texter = texter + x + "\n" + y.split(",")[0] + "\n" + "." * 50 + "\n"
-                date = date + z + "\n.\n.\n"
+                date = date + z +  ('\n'+w if w != '' else '\n.')  + "\n.\n"
                 print(texter)
             embed.add_field(name=f"KELAS {kelas}", value=texter, inline=True)
             # embed.add_field(name=f'KELAS {new}',value=df['MATA KULIAH'].to_string(index=False),inline=True)
