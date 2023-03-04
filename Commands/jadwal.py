@@ -3,7 +3,7 @@ from discord.ext import commands
 import pandas as pd
 import pathlib
 
-BASE_DIR = pathlib.Path.cwd().parent.parent
+BASE_DIR = pathlib.Path.cwd().parent
 EXCEL_DIR = BASE_DIR / "Excel"
 
 kelas_valid = ['A','B','C','D','E','F']
