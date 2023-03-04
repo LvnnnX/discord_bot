@@ -2,10 +2,18 @@ import discord
 from discord.ext import commands
 import pandas as pd
 import pathlib
-import re
 
-BASE_DIR = pathlib.Path(__file__).parent.parent
+BASE_DIR = pathlib.Path.cwd().parent.parent
 EXCEL_DIR = BASE_DIR / "Excel"
+
+kelas_valid = ['A','B','C','D','E','F']
+df = pd.read_excel(f'{EXCEL_DIR}/Jadual Genap 2022-2023 eDIT 1.xlsx')
+webex = pd.read_excel(f'{EXCEL_DIR}/Webex Dosen.xlsx')
+df = df[11:18]
+df.rename(columns={'Unnamed: 0' : 'Kode', 'Unnamed: 1':'Mata Kuliah', 'Unnamed: 2':'SKS','INISIAL DOSEN':'A', 'Unnamed: 4' : 'B','Unnamed: 5' : 'C','Unnamed: 6' : 'D','Unnamed: 7' : 'E','Unnamed: 8' : 'F','HARI / WAKTU' : 'Jadwal A','Unnamed: 10' : 'Jadwal B','Unnamed: 11' : 'Jadwal C','Unnamed: 12' : 'Jadwal D','Unnamed: 13' : 'Jadwal E','Unnamed: 14' : 'Jadwal F'},inplace=True)
+df.drop(columns=["Kode", "SKS"], inplace=True)
+df = df.astype({f"Mata Kuliah": str})
+
 
 class jadwal(commands.Cog):
     def __init__(self,client):
@@ -17,7 +25,6 @@ class jadwal(commands.Cog):
     
     @commands.command(help='n.jadwal (jadwal Informatika 2021)')
     async def jadwal(self, ctx, args):
-        kelas_valid = ['A','B','C','D','E','F']
         if(args.lower()=='all'):
             all_kelas = kelas_valid
             embed = discord.Embed(
@@ -36,19 +43,13 @@ class jadwal(commands.Cog):
             return
         
         # Data jadwal
-        df = pd.read_excel(f'{EXCEL_DIR}/Jadual Genap 2022-2023 eDIT 1.xlsx')
-        webex = pd.read_excel(f'{EXCEL_DIR}/Webex Dosen.xlsx')
-        df = df[11:18]
-        df.rename(columns={'Unnamed: 0' : 'Kode', 'Unnamed: 1':'Mata Kuliah', 'Unnamed: 2':'SKS','INISIAL DOSEN':'A', 'Unnamed: 4' : 'B','Unnamed: 5' : 'C','Unnamed: 6' : 'D','Unnamed: 7' : 'E','Unnamed: 8' : 'F','HARI / WAKTU' : 'Jadwal A','Unnamed: 10' : 'Jadwal B','Unnamed: 11' : 'Jadwal C','Unnamed: 12' : 'Jadwal D','Unnamed: 13' : 'Jadwal E','Unnamed: 14' : 'Jadwal F'},inplace=True)
         # df = df.loc[:, ~df.columns.str.contains("^Unnamed")]
         # dropindex = [int(x) for x in range(0, 12)] + [int(x) for x in range(19, len(df))]
         # df.drop(index=dropindex, inplace=True)
-        df.drop(columns=["Kode", "SKS"], inplace=True)
         # Data jadwal fix
 
         # Priorities untuk sorting
         priorities = ["minggu", "sabtu", "jumat", "kamis", "rabu", "selasa", "senin"]
-        df = df.astype({f"Mata Kuliah": str})
         # Add field to discord embed
         #KELAS A#
         for kelas in all_kelas:
