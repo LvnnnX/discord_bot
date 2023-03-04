@@ -6,6 +6,7 @@ __pycache__/
 *.ipynb
 *.txt
 bot.py
+bot.bat
 # C extensions
 *.so
 

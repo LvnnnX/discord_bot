@@ -1,22 +1,24 @@
 import discord
-import random
+import random,json
 from discord.ext import commands, tasks
 from dotenv import load_dotenv
 from itertools import cycle
 import pathlib
 
+BASE_DIR = pathlib.Path(__file__).parent
+CMDS_DIR = BASE_DIR / "Commands"
+PIC_DIR = BASE_DIR / "Pictures"
+TDIR = BASE_DIR / "token"
+
 load_dotenv()
 
 intents = discord.Intents.all()
 intents.message_content = True
-token = "yourtoken!"
+with open(f'{TDIR}/dctoken.json') as f:
+    tokens = json.load(f)
+    token = tokens['Discord_API']
 client = commands.Bot(command_prefix="n.", intents=intents)
 
-BASE_DIR = pathlib.Path(__file__).parent
-
-CMDS_DIR = BASE_DIR / "Commands"
-
-PIC_DIR = BASE_DIR / "Pictures"
 
 # FOR MESSAGES #
 hai = ["hello", "hai", "hi", "halo", "ngikngok"]
@@ -114,6 +116,15 @@ def run():
             await ctx.send(f"{args} unloaded!")
         except:
             await ctx.send(f"unload failed!")
+
+    @client.command()
+    async def reload(ctx,args):
+        try:
+            await client.unload_extension(f"Commands.{args}")
+            await client.load_extension(f"Commands.{args}")
+            await ctx.send(f'{args} reloaded!')
+        except:
+            await ctx.send(f'{args} failed reloaded')
 
     # Mendeteksi pesan
     @client.event
