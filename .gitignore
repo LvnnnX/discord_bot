@@ -5,6 +5,11 @@ __pycache__/
 *.json
 *.ipynb
 *.txt
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.wav
 bot.py
 bot.bat
 # C extensions

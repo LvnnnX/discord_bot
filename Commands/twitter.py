@@ -1,7 +1,6 @@
 import discord, json
 import tweepy, pathlib
 from discord.ext import commands
-from requests_oauthlib import OAuth1
 
 BASE_DIR = pathlib.Path(__file__).parent  # base directory
 TOKEN_DIR = BASE_DIR.parent / "token" # token directory a.k.a parent dir
