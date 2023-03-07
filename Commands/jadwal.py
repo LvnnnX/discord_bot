@@ -54,6 +54,7 @@ class jadwal(commands.Cog):
         #KELAS A#
         for kelas in all_kelas:
             kelas_df = df.copy()
+            cek_hari = [0 for x in range(len(kelas_df))]
         # display(kelas_df)
             for key in range(len(kelas_df)):
                 hari_now=kelas_df[f'Jadwal {kelas}'].iloc[key].split('/')[0].strip().lower()
@@ -69,7 +70,7 @@ class jadwal(commands.Cog):
                         if(int(jam_now)>int(jam_next)):
                             b,a = kelas_df.iloc[key2].copy() ,kelas_df.iloc[key].copy()
                             kelas_df.iloc[key2],kelas_df.iloc[key] = a,b
-                linkweb = ['' for x in (len(kelas_df))]
+                linkweb = ['' for x in range(len(kelas_df))]
                 for x in range(len(kelas_df)):
                     namadosen = kelas_df[f'{kelas}'].iloc[x]
                     for y in range(len(webex)):
@@ -77,16 +78,23 @@ class jadwal(commands.Cog):
                         if(namadosen==namadosen2):
                             linkweb[x] = (webex['Link'].iloc[y])
                 kelas_df['Link Webex'] = linkweb
-            texter = ""
-            date = ""
-            for w, x, y, z in zip(kelas_df['Link Webex'], kelas_df["Mata Kuliah"], kelas_df[f"{kelas}"], kelas_df[f"Jadwal {kelas}"]):
-                texter = texter + x + "\n" + y.split(",")[0] + ("\n"+"." * 10 if len(x)<=28 else '') + ('\n'+'.'*10+'\n' if len(w)>=53 else '\n')
-                date = date + z +  ('\n'+w+'\n' if w != '' else '\n.\n.\n')
-            embed.add_field(name=f"『KELAS {kelas}』", value=texter, inline=True)
+            embed.add_field(name=f"『KELAS {kelas}』", value='\u200b', inline=True)
+            embed.add_field(name="『JAM PELAJARAN』", value='\u200b', inline=True)
+            embed.add_field(name='\u200b', value='\u200b',inline=True)
+            for day in priorities[::-1]:
+                texter = ""
+                date = ""
+                for w, x, y, z in zip(kelas_df['Link Webex'], kelas_df["Mata Kuliah"], kelas_df[f"{kelas}"], kelas_df[f"Jadwal {kelas}"]):
+                    get_hari = z.split('/')[0].strip().lower()
+                    if(get_hari==day):
+                        texter = texter + x + "\n" + y.split(",")[0] + ("\n"+"." * 10 if len(x)<=28 else '') + ('\n'+'.'*10+'\n' if len(w)>=53 else '\n')
+                        date = date + z +  ('\n'+w+'\n' if w != '' else '\n.\n.\n')
+                if(len(texter)>0):
+                    embed.add_field(name=f'--=-- '+day.upper()+f' --=--', value=texter,inline=True)
+                    embed.add_field(name=f'--=-- '+f'JAM & LINK' +f' --=--', value=date,inline=True)
+                    embed.add_field(name='\u200b', value='\u200b',inline=True)
             # embed.add_field(name=f'KELAS {new}',value=df['MATA KULIAH'].to_string(index=False),inline=True)
-            embed.add_field(name="『JAM PELAJARAN』", value=date, inline=True)
             # embed.add_field(name='JAM PELAJARAN',value=df[f'JADWAL {new}'].to_string(index=False),inline=True)
-            embed.add_field(name="\u200b", value="\u200b")
 
         embed.set_author(
             name="by Agatha & Ngikngok",
