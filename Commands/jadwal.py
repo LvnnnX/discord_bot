@@ -69,7 +69,7 @@ class jadwal(commands.Cog):
                         if(int(jam_now)>int(jam_next)):
                             b,a = kelas_df.iloc[key2].copy() ,kelas_df.iloc[key].copy()
                             kelas_df.iloc[key2],kelas_df.iloc[key] = a,b
-                linkweb = ['' * (len(kelas_df))]
+                linkweb = ['' for x in (len(kelas_df))]
                 for x in range(len(kelas_df)):
                     namadosen = kelas_df[f'{kelas}'].iloc[x]
                     for y in range(len(webex)):
