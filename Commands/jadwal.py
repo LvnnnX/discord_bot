@@ -25,12 +25,7 @@ class jadwal(commands.Cog):
     
     @commands.command(help='n.jadwal (jadwal Informatika 2021)')
     async def jadwal(self, ctx, args):
-        if(args.lower()=='all'):
-            all_kelas = kelas_valid
-            embed = discord.Embed(
-                title=f"Jadwal Semua Kelas Informatika 21 | Genap 2023", colour=discord.Colour.blue()
-            )
-        elif(args.upper() in kelas_valid):
+        if(args.upper() in kelas_valid):
             all_kelas = [f'{args.upper()}']
             embed = discord.Embed(
                 title=f"Jadwal Kelas {args.upper()} Informatika 21 | Genap 2023", colour=discord.Colour.blue()
@@ -87,7 +82,7 @@ class jadwal(commands.Cog):
                 for w, x, y, z in zip(kelas_df['Link Webex'], kelas_df["Mata Kuliah"], kelas_df[f"{kelas}"], kelas_df[f"Jadwal {kelas}"]):
                     get_hari = z.split('/')[0].strip().lower()
                     if(get_hari==day):
-                        texter = texter + x + "\n" + y.split(",")[0] + ("\n"+"." * 10 if len(x)<=28 else '') + ('\n'+'.'*10+'\n' if len(w)>=53 else '\n')
+                        texter = texter + x + "\n" + y.split(",")[0] + ("\n"+" " if len(x)<=28 else '') + ('\n'+' ' +'\n' if len(w)>=53 else '\n')
                         date = date + z +  ('\n'+w+'\n' if w != '' else '\n.\n.\n')
                 if(len(texter)>0):
                     embed.add_field(name=f'--=-- '+day.upper()+f' --=--', value=texter,inline=True)
